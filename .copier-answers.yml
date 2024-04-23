@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 2024.03.10
+_src_path: gh:scientific-python/cookie
+backend: hatch
+email: simon@gmail.com
+full_name: Simon
+license: BSD
+org: SimonUU
+project_name: pyminufit
+project_short_description: A great package.
+url: https://github.com/SimonUU/pyminufit
+vcs: true
