@@ -1,9 +1,12 @@
+"""
+Observables
+
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Optional, Union
-
-"""Observables"""
 
 
 @dataclass
@@ -16,7 +19,6 @@ class RealVar:
     lwb: Optional[float]
     upb: Optional[float]
     unit: Optional[str]
-    reference_obj: Optional[None]
 
     def __float__(self) -> float:
         return float(self.value)
@@ -86,4 +88,4 @@ def create_real_var(
         name, value, lwb, upb = extract_from_list(var)
     if name_override:
         name = name_override
-    return RealVar(name, value, error, lwb, upb, unit, None)  # type: ignore[arg-type]
+    return RealVar(name, value, error, lwb, upb, unit)  # type: ignore[arg-type]

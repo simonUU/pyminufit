@@ -90,6 +90,8 @@ class Pdf(ClassLoggingMixin):
         return self._fit(data, *args, **kwds)
 
     def _fit(self, data: ArrayLike, *args, **kwds) -> Minuit:  # type: ignore[no-untyped-def]
+        """Fit logic implemented in the models"""
+        # pylint: disable=unused-argument
         msg = "Please implement the fit method"
         raise NotImplementedError(msg)
 
@@ -99,9 +101,14 @@ class Pdf(ClassLoggingMixin):
             self.parameters[p].error = m.errors[p]
             setattr(self, p, self.parameters[p])
 
-    def evaluate(self, x):
-        msg = "Please implement the evaluate method"
-        raise NotImplementedError(msg)
+    def _pdf(self, x: ArrayLike, *args, **kwds) -> ArrayLike:  # type: ignore[no-untyped-def]
+        """PDF logic implemented in the models"""
+        # pylint: disable=unused-argument
+        return x
+    
+    def evaluate(self, x: ArrayLike) -> ArrayLike:
+        parameter_values = {p: self.parameters[p].value for p in self.parameters}
+        return self._pdf(x, **parameter_values) 
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.evaluate(*args, **kwds)

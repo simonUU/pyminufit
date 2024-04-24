@@ -35,8 +35,3 @@ class Gauss(Pdf):
 
     def _pdf(self, x, mean, sigma):
         return norm.pdf(x, mean, sigma)
-
-    def evaluate(self, x):
-        return self._pdf(
-            x, self.parameters["mean"].value, self.parameters["sigma"].value
-        )
