@@ -25,3 +25,14 @@
 [rtd-link]:                 https://pyminufit.readthedocs.io/en/latest/?badge=latest
 
 <!-- prettier-ignore-end -->
+
+This package is an interface to `iminuit` to allow for fast simple fits.
+
+## Example
+
+    will be added soon
+
+---
+
+This package was created using the scientific python template from
+https://scientific-python.org/.
