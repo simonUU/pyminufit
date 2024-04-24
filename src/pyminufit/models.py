@@ -25,7 +25,7 @@ class Gauss(Pdf):
         m = Minuit(
             cost,
             mean=self.parameters["mean"].value,
-            sigma=self.parameters["sigma"].value
+            sigma=self.parameters["sigma"].value,
         )
         # ToDo: set limits
         m.migrad(*args, **kwds)
