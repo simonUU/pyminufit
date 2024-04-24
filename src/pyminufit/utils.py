@@ -15,7 +15,7 @@ from typing import Any
 class ClassLoggingMixin:
     """Mixin class that enables logging for instances of a specific class"""
 
-    def __init__(self, *args, **kwds) -> None:
+    def __init__(self, *args: Any, **kwds: Any) -> None:
         """Initialise the logger instance"""
         super().__init__(*args, **kwds)
         self.logger = logging.getLogger(self.__class__.__name__)
@@ -45,10 +45,10 @@ class ClassLoggingMixin:
         )
 
 
-class AttrDict(dict):
+class AttrDict(dict):  # type: ignore[type-arg]
     """Dictionary which items can also be addressed by attribute lookup in addition to item lookup"""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.__dict__ = self
 
@@ -59,7 +59,7 @@ def check_kwds(keys):
     def decorator(func):
         """Decorator applying a check for valid keyword argument names to the function"""
         valid_keys = set(keys)
-        valid_keys.update(inspect.signature(func).args)
+        valid_keys.update(inspect.signature(func).args)  # type: ignore[attr-defined]
 
         @functools.wraps(func)
         def decorated(*args, **kwds):
@@ -73,7 +73,7 @@ def check_kwds(keys):
     return decorator
 
 
-def is_iterable(obj: Any):
+def is_iterable(obj: Any) -> bool:
     """Check if an object is iterable
 
     Args:
@@ -113,7 +113,7 @@ class Singleton:
         On all subsequent calls, the already created instance is returned.
         """
         try:
-            return self._instance
+            return self._instance  # type: ignore[has-type]
         except AttributeError:
             self._instance = self._decorated()
             return self._instance

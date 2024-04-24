@@ -20,15 +20,15 @@ class Gauss(Pdf):
         mean = self.add_parameter(mean, "mean")
         sigma = self.add_parameter(sigma, "sigma")
 
-    def _fit(self, data):
+    def _fit(self, data, *args, **kwds):
         cost = UnbinnedNLL(data, self._pdf)
         m = Minuit(
             cost,
             mean=self.parameters["mean"].value,
-            sigma=self.parameters["sigma"].value,
+            sigma=self.parameters["sigma"].value
         )
         # ToDo: set limits
-        m.migrad()
+        m.migrad(*args, **kwds)
         m.hesse()
         self._update_parameters(m)
         return m

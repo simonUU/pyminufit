@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import pytest
 from pyminufit.observables import create_real_var
 
 

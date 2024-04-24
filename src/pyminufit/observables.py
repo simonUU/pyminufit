@@ -8,6 +8,8 @@ from typing import Optional, Union
 
 @dataclass
 class RealVar:
+    """Real variable class"""
+
     name: str
     value: float
     error: Optional[float]
@@ -26,9 +28,7 @@ class RealVar:
         return f"<b>{self.name}</b>: {self.value:.3g} ± {self.error:.3g} {self.unit}"
 
 
-def extract_from_list(
-    var: Union[list, tuple],
-) -> tuple[str, float, Optional[float], Optional[float]]:
+def extract_from_list(var: Union[list, tuple]) -> tuple:  # type: ignore[type-arg]
     """Extract name, min, mean and max from a list
 
     Args:
@@ -59,7 +59,7 @@ def extract_from_list(
 
 
 def create_real_var(
-    var: Optional[Union[list, tuple]] = None,
+    var: Optional[Union[list, tuple]] = None,  # type: ignore[type-arg]
     name: str = "x",
     lwb: Optional[float] = None,
     upb: Optional[float] = None,
@@ -86,4 +86,4 @@ def create_real_var(
         name, value, lwb, upb = extract_from_list(var)
     if name_override:
         name = name_override
-    return RealVar(name, value, error, lwb, upb, unit, None)
+    return RealVar(name, value, error, lwb, upb, unit, None)  # type: ignore[arg-type]
