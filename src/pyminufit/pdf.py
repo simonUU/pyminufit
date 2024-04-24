@@ -31,7 +31,9 @@ class Pdf(ClassLoggingMixin):
         for p in self.parameters:
             self.__setattr__(p, self.parameters[p])
 
-    def add_parameter(self, param_var, param_name=None, final_name=None, **kwds) -> RealVar:
+    def add_parameter(
+        self, param_var, param_name=None, final_name=None, **kwds
+    ) -> RealVar:
         if final_name is None:
             assert (
                 param_name is not None
