@@ -1,23 +1,19 @@
-# -*- coding: utf-8 -*-
-""" Fit models predefined
+"""Fit models predefined"""
 
-"""
-from .pdf import Pdf
-from scipy.stats import norm
-from iminuit.cost import UnbinnedNLL
+from __future__ import annotations
+
 from iminuit import Minuit
+from iminuit.cost import UnbinnedNLL
+from scipy.stats import norm
+
+from .pdf import Pdf
+
 
 class Gauss(Pdf):
-    """ Standard gaussian
+    """Standard gaussian"""
 
-    """
-    def __init__(self,
-                 observable,
-                 mean=(-1, 0, 1),
-                 sigma=(0, 1),
-                 name='gauss', **kwds):
-
-        super(Gauss, self).__init__(name=name,  **kwds)
+    def __init__(self, observable, mean=(-1, 0, 1), sigma=(0, 1), name="gauss", **kwds):
+        super(Gauss, self).__init__(name=name, **kwds)
 
         x = self.add_observable(observable)
 
@@ -32,7 +28,7 @@ class Gauss(Pdf):
         m.hesse()
         self._update_parameters(m)
         return m
-    
+
     def _pdf(self, x, mean, sigma):
         return norm.pdf(x, mean, sigma)
 

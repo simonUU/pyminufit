@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
 """
 Some utility constructs.
 
 """
 
-import logging
+from __future__ import annotations
+
 import collections
-import inspect
 import functools
+import inspect
+import logging
 
 
-class ClassLoggingMixin(object):
-    """Mixin class that enables logging for instances of a specific class
+class ClassLoggingMixin:
+    """Mixin class that enables logging for instances of a specific class"""
 
-    """
     def __init__(self, *args, **kwds):
         """Initialise the logger instance"""
         super(ClassLoggingMixin, self).__init__(*args, **kwds)
@@ -36,26 +36,29 @@ class ClassLoggingMixin(object):
 
     @staticmethod
     def setup_basic_config():
-        logging.basicConfig(level=logging.DEBUG,
-                            format='%(name)-18s \t %(levelname)-8s %(message)s',
-                            datefmt='%m-%d %H:%M')
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(name)-18s \t %(levelname)-8s %(message)s",
+            datefmt="%m-%d %H:%M",
+        )
 
 
 class AttrDict(dict):
     """Dictionary which items can also be addressed by attribute lookup in addition to item lookup"""
+
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
 
 def check_kwds(keys):
-    """Decorator factory for decorators checking for valid keyword argument names
+    """Decorator factory for decorators checking for valid keyword argument names"""
 
-    """
     def decorator(func):
         """Decorator applying a check for valid keyword argument names to the function"""
         valid_keys = set(keys)
         valid_keys.update(inspect.signature(func).args)
+
         @functools.wraps(func)
         def decorated(*args, **kwds):
             for key in kwds:
@@ -64,6 +67,7 @@ def check_kwds(keys):
             return func(*args, **kwds)
 
         return decorated
+
     return decorator
 
 
@@ -80,7 +84,7 @@ def is_iterable(obj):
     return isinstance(obj, collections.abc.Iterable)
 
 
-class Singleton(object):
+class Singleton:
     """
     A non-thread-safe helper class to ease implementing singletons.
     This should be used as a decorator -- not a metaclass -- to the
@@ -113,7 +117,7 @@ class Singleton(object):
             return self._instance
 
     def __call__(self):
-        raise TypeError('Singletons must be accessed through `Instance()`.')
+        raise TypeError("Singletons must be accessed through `Instance()`.")
 
     def __instancecheck__(self, inst):
         return isinstance(inst, self._decorated)

@@ -1,4 +1,5 @@
-import pytest
+from __future__ import annotations
+
 from pyminufit.observables import create_real_var
 
 
@@ -12,7 +13,7 @@ def test_create_real_var():
     assert result.unit == ""
 
     # Test case 2: Testing with var=['x', -1, 1]
-    result = create_real_var(var=['x', -1, 1])
+    result = create_real_var(var=["x", -1, 1])
     assert result.name == "x"
     assert result.value == 0
     assert result.lwb == -1

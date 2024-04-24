@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
-""" Observables
-"""
+"""Observables"""
+
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass
@@ -14,22 +14,19 @@ class RealVar:
     upb: float
     unit: str
     reference_obj: None
-    
+
     def __float__(self):
         return float(self.value)
-    
+
     def __call__(self) -> float:
         return float(self.value)
-    
+
     def _repr_html_(self):
-#        if abs(self.value) < 1e-3 or abs(self.value) > 1e3:
-#            return f"<b>{self.name}</b>: {self.value:.2e} ± {self.error:.2e} {self.unit}"
-#        else:
         return f"<b>{self.name}</b>: {self.value:.3g} ± {self.error:.3g} {self.unit}"
-    
+
 
 def extract_from_list(var):
-    """ Extract name, min, mean and max from a list
+    """Extract name, min, mean and max from a list
 
     Args:
         var (list): List in a format like ['x', -1, 1] or (-2, 0, 3)
@@ -50,16 +47,18 @@ def extract_from_list(var):
     var = sorted(var)
     if len(var) == 2:
         lwb, upb = var
-        val = lwb+upb
-        val /= 2.
+        val = lwb + upb
+        val /= 2.0
     if len(var) == 3:
         lwb, val, upb = var
 
     return name, val, lwb, upb
 
 
-def create_real_var(var=None, name="x", lwb=None, upb=None, value=None, unit="", error=None) -> RealVar:
-    """ Create a RealVar object
+def create_real_var(
+    var=None, name="x", lwb=None, upb=None, value=None, unit="", error=None
+) -> RealVar:
+    """Create a RealVar object
 
     Args:
         var (list): List in a format like ['x', -1, 1] or (-2, 0, 3)

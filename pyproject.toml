@@ -33,7 +33,7 @@ dynamic = ["version"]
 dependencies = [
   "iminuit",
   "scipy",
-  "matplotlib"
+  "matplotlib",
 ]
 
 [project.optional-dependencies]
@@ -44,6 +44,7 @@ test = [
 dev = [
   "pytest >=6",
   "pytest-cov >=3",
+  "black",
 ]
 docs = [
   "sphinx>=7.0",
