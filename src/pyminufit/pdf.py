@@ -6,7 +6,7 @@ from typing import Any
 
 from iminuit import Minuit
 
-from .observables import create_real_var
+from .observables import RealVar, create_real_var
 from .utils import AttrDict, ClassLoggingMixin
 
 
@@ -15,8 +15,7 @@ class Pdf(ClassLoggingMixin):
 
     def __init__(self, name, observables=None, **kwds):
         """Initialise the Pdf"""
-        super(Pdf, self).__init__(**kwds)
-
+        super().__init__(**kwds)
         self.name = name
         self.observables = AttrDict()
         if observables:
@@ -27,12 +26,12 @@ class Pdf(ClassLoggingMixin):
         self.pdf = None
         self._init_pdf()
 
-    def _init_pdf(self):
+    def _init_pdf(self) -> None:
         """Initiate attributes for parameters"""
         for p in self.parameters:
             self.__setattr__(p, self.parameters[p])
 
-    def add_parameter(self, param_var, param_name=None, final_name=None, **kwds):
+    def add_parameter(self, param_var, param_name=None, final_name=None, **kwds) -> RealVar:
         if final_name is None:
             assert (
                 param_name is not None
@@ -47,25 +46,24 @@ class Pdf(ClassLoggingMixin):
         self.__setattr__(param_name, param)
         return self.parameters[param_name]
 
-    def add_observable(self, observable_var, **kwds):
+    def add_observable(self, observable_var, **kwds) -> RealVar:
         """Add an observable to the PDF"""
-        if isinstance(observable_var, (list, tuple)):
-            if not isinstance(observable_var[0], str):
-                self.warn("WARNING : choosing automatic variable name 'x'")
+        if isinstance(observable_var, (list, tuple)) and not isinstance(
+            observable_var[0], str
+        ):
+            self.warn("WARNING : choosing automatic variable name 'x'")
 
         observable = create_real_var(observable_var, **kwds)
         name = observable.name
         self.observables[name] = observable
         return self.observables[name]
 
-    def fit(self, data, *args, **kwds):
+    def fit(self, data, *args, **kwds) -> Minuit:
         """Fit the PDF to the data"""
         self.logger.debug("Fitting")
         return self._fit(data, *args, **kwds)
 
-    def _fit(
-        self,
-    ):
+    def _fit(self, *args, **kwds) -> Minuit:
         raise NotImplementedError("Please implement the fit method")
 
     def _update_parameters(self, m: Minuit):

@@ -13,7 +13,7 @@ class Gauss(Pdf):
     """Standard gaussian"""
 
     def __init__(self, observable, mean=(-1, 0, 1), sigma=(0, 1), name="gauss", **kwds):
-        super(Gauss, self).__init__(name=name, **kwds)
+        super().__init__(name, **kwds)
 
         x = self.add_observable(observable)
 
@@ -22,7 +22,11 @@ class Gauss(Pdf):
 
     def _fit(self, data):
         cost = UnbinnedNLL(data, self._pdf)
-        m = Minuit(cost, mean=self.mean.value, sigma=self.sigma.value)
+        m = Minuit(
+            cost,
+            mean=self.parameters["mean"].value,
+            sigma=self.parameters["sigma"].value,
+        )
         # ToDo: set limits
         m.migrad()
         m.hesse()
@@ -33,4 +37,6 @@ class Gauss(Pdf):
         return norm.pdf(x, mean, sigma)
 
     def evaluate(self, x):
-        return self._pdf(x, self.mean(), self.sigma())
+        return self._pdf(
+            x, self.parameters["mean"].value, self.parameters["sigma"].value
+        )

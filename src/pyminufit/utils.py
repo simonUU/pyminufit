@@ -9,33 +9,35 @@ import collections
 import functools
 import inspect
 import logging
+from typing import Any
 
 
 class ClassLoggingMixin:
     """Mixin class that enables logging for instances of a specific class"""
 
-    def __init__(self, *args, **kwds):
+    def __init__(self, *args, **kwds) -> None:
         """Initialise the logger instance"""
-        super(ClassLoggingMixin, self).__init__(*args, **kwds)
+        super().__init__(*args, **kwds)
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def debug(self, msg):
+    def debug(self, msg: str) -> None:
         self.logger.debug(msg)
 
-    def info(self, msg):
+    def info(self, msg: str) -> None:
         self.logger.info(self, msg)
 
-    def warn(self, msg):
+    def warn(self, msg: str) -> None:
         self.logger.warning(msg)
 
-    def error(self, msg):
+    def error(self, msg: str) -> None:
         self.logger.error(msg)
 
-    def unknown_error(self):
-        self.logger.error("Unknown Error occured o_O")
+    def unknown_error(self) -> None:
+        self.logger.error("Unknown Error occurred o_O")
 
     @staticmethod
-    def setup_basic_config():
+    def setup_basic_config() -> None:
+        """Setup basic logging configuration"""
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(name)-18s \t %(levelname)-8s %(message)s",
@@ -46,8 +48,8 @@ class ClassLoggingMixin:
 class AttrDict(dict):
     """Dictionary which items can also be addressed by attribute lookup in addition to item lookup"""
 
-    def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.__dict__ = self
 
 
@@ -71,7 +73,7 @@ def check_kwds(keys):
     return decorator
 
 
-def is_iterable(obj):
+def is_iterable(obj: Any):
     """Check if an object is iterable
 
     Args:

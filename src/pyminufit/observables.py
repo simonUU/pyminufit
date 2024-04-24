@@ -1,38 +1,41 @@
-"""Observables"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional, Union
+
+"""Observables"""
 
 
 @dataclass
 class RealVar:
     name: str
     value: float
-    error: float
-    lwb: float
-    upb: float
-    unit: str
-    reference_obj: None
+    error: Optional[float]
+    lwb: Optional[float]
+    upb: Optional[float]
+    unit: Optional[str]
+    reference_obj: Optional[None]
 
-    def __float__(self):
+    def __float__(self) -> float:
         return float(self.value)
 
     def __call__(self) -> float:
         return float(self.value)
 
-    def _repr_html_(self):
+    def _repr_html_(self) -> str:
         return f"<b>{self.name}</b>: {self.value:.3g} ± {self.error:.3g} {self.unit}"
 
 
-def extract_from_list(var):
+def extract_from_list(
+    var: Union[list, tuple],
+) -> tuple[str, float, Optional[float], Optional[float]]:
     """Extract name, min, mean and max from a list
 
     Args:
-        var (list): List in a format like ['x', -1, 1] or (-2, 0, 3)
+        var (list or tuple): List in a format like ['x', -1, 1] or (-2, 0, 3)
 
     Returns:
-        name, value, min, max
+        Tuple containing name, value, min, max
 
     """
     var = list(var)
@@ -56,12 +59,18 @@ def extract_from_list(var):
 
 
 def create_real_var(
-    var=None, name="x", lwb=None, upb=None, value=None, unit="", error=None
+    var: Optional[Union[list, tuple]] = None,
+    name: str = "x",
+    lwb: Optional[float] = None,
+    upb: Optional[float] = None,
+    value: Optional[float] = None,
+    unit: str = "",
+    error: Optional[float] = None,
 ) -> RealVar:
     """Create a RealVar object
 
     Args:
-        var (list): List in a format like ['x', -1, 1] or (-2, 0, 3)
+        var (list or tuple): List in a format like ['x', -1, 1] or (-2, 0, 3)
         name (str): Name of the variable
         lwb (float): Lower bound
         upb (float): Upper bound

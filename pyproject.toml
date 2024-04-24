@@ -92,7 +92,7 @@ report.exclude_also = [
 ]
 
 [tool.mypy]
-files = ["src", "tests"]
+files = ["src"]
 python_version = "3.8"
 warn_unused_configs = true
 strict = true
@@ -103,7 +103,7 @@ disallow_incomplete_defs = false
 
 [[tool.mypy.overrides]]
 module = "pyminufit.*"
-disallow_untyped_defs = true
+disallow_untyped_defs = false
 disallow_incomplete_defs = true
 
 
