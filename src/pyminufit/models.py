@@ -15,7 +15,7 @@ class Gauss(Pdf):
     def __init__(self, observable, mean=(-1, 0, 1), sigma=(0, 1), name="gauss", **kwds):
         super().__init__(name, **kwds)
 
-        x = self.add_observable(observable)
+        _ = self.add_observable(observable)
 
         mean = self.add_parameter(mean, "mean")
         sigma = self.add_parameter(sigma, "sigma")

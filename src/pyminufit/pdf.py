@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from iminuit import Minuit
+from numpy.typing import ArrayLike
 
 from .observables import RealVar, create_real_var
 from .utils import AttrDict, ClassLoggingMixin
@@ -60,13 +61,14 @@ class Pdf(ClassLoggingMixin):
         self.observables[name] = observable
         return self.observables[name]
 
-    def fit(self, data, *args, **kwds) -> Minuit:
+    def fit(self, data: ArrayLike, *args, **kwds) -> Minuit:
         """Fit the PDF to the data"""
         self.logger.debug("Fitting")
         return self._fit(data, *args, **kwds)
 
     def _fit(self, *args, **kwds) -> Minuit:
-        raise NotImplementedError("Please implement the fit method")
+        msg = "Please implement the fit method"
+        raise NotImplementedError(msg)
 
     def _update_parameters(self, m: Minuit):
         for p in self.parameters:
@@ -75,7 +77,8 @@ class Pdf(ClassLoggingMixin):
             self.__setattr__(p, self.parameters[p])
 
     def evaluate(self, x):
-        raise NotImplementedError("Please implement the evaluate method")
+        msg = "Please implement the evaluate method"
+        raise NotImplementedError(msg)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.evaluate(*args, **kwds)
