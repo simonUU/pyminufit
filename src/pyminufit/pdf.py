@@ -105,10 +105,10 @@ class Pdf(ClassLoggingMixin):
         """PDF logic implemented in the models"""
         # pylint: disable=unused-argument
         return x
-    
+
     def evaluate(self, x: ArrayLike) -> ArrayLike:
         parameter_values = {p: self.parameters[p].value for p in self.parameters}
-        return self._pdf(x, **parameter_values) 
+        return self._pdf(x, **parameter_values)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.evaluate(*args, **kwds)

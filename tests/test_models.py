@@ -1,6 +1,7 @@
 import pytest
 from pyminufit.models import Gauss
 
+
 def test_Gauss_fit():
     # Test case 1: Testing with default parameters
     gauss = Gauss(observable=(-1, 1))
