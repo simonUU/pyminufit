@@ -160,4 +160,4 @@ Thumbs.db
 
 # Custom
 dev
-src/pyminuit/version.py
+src/pyminufit/version.py
