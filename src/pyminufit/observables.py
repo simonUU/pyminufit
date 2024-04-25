@@ -6,7 +6,7 @@ Observables
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 
 @dataclass
@@ -19,6 +19,7 @@ class RealVar:
     lwb: Optional[float]
     upb: Optional[float]
     unit: Optional[str]
+    is_constant: bool = False
 
     def __float__(self) -> float:
         return float(self.value)
@@ -61,7 +62,7 @@ def extract_from_list(var: Union[list, tuple]) -> tuple:  # type: ignore[type-ar
 
 
 def create_real_var(
-    var: Optional[Union[list, tuple]] = None,  # type: ignore[type-arg]
+    var: Optional[Any] = None,
     name: str = "x",
     lwb: Optional[float] = None,
     upb: Optional[float] = None,
@@ -85,7 +86,13 @@ def create_real_var(
     """
     name_override = name
     if var:
+        override_bounds = False
+        if isinstance(var, float):
+            override_bounds = True
+            var = (var, var, var)
         name, value, lwb, upb = extract_from_list(var)
+        if override_bounds:
+            lwb = upb = None
     if name_override:
         name = name_override
     return RealVar(name, value, error, lwb, upb, unit)  # type: ignore[arg-type]

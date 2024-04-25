@@ -6,8 +6,6 @@ Some utility constructs.
 from __future__ import annotations
 
 import collections
-import functools
-import inspect
 import logging
 from typing import Any
 
@@ -51,26 +49,6 @@ class AttrDict(dict):  # type: ignore[type-arg]
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.__dict__ = self
-
-
-def check_kwds(keys):
-    """Decorator factory for decorators checking for valid keyword argument names"""
-
-    def decorator(func):
-        """Decorator applying a check for valid keyword argument names to the function"""
-        valid_keys = set(keys)
-        valid_keys.update(inspect.signature(func).args)  # type: ignore[attr-defined]
-
-        @functools.wraps(func)
-        def decorated(*args, **kwds):
-            for key in kwds:
-                if key not in valid_keys:
-                    raise KeyError("Unallowed keyword argument " + key)
-            return func(*args, **kwds)
-
-        return decorated
-
-    return decorator
 
 
 def is_iterable(obj: Any) -> bool:

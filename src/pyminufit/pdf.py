@@ -26,7 +26,7 @@ class Pdf(ClassLoggingMixin):
                 self.add_observable(observable)
         self.parameters = AttrDict()
         self.parameters_names = AttrDict()
-        self.pdf = None
+        self.cost = None
         self._init_pdf()
 
     def _init_pdf(self) -> None:
@@ -52,10 +52,6 @@ class Pdf(ClassLoggingMixin):
 
         Returns:
             RealVar: The added parameter.
-
-        Raises:
-            AssertionError: If final_name is not provided and param_name is None.
-            AssertionError: If param_name is not a string.
 
         """
         if final_name is None:
@@ -84,12 +80,14 @@ class Pdf(ClassLoggingMixin):
         self.observables[name] = observable
         return self.observables[name]  # type: ignore[no-any-return]
 
-    def fit(self, data: ArrayLike, *args, **kwds) -> Minuit:  # type: ignore[no-untyped-def]
+    def fit(self, data: ArrayLike, **kwds: Any) -> Minuit:
         """Fit the PDF to the data"""
         self.logger.debug("Fitting")
-        return self._fit(data, *args, **kwds)
+        fit_res = self._fit(data, **kwds)
+        self._update_parameters(fit_res)
+        return fit_res
 
-    def _fit(self, data: ArrayLike, *args, **kwds) -> Minuit:  # type: ignore[no-untyped-def]
+    def _fit(self, data: ArrayLike, **kwds: Any) -> Minuit:
         """Fit logic implemented in the models"""
         # pylint: disable=unused-argument
         msg = "Please implement the fit method"
@@ -101,14 +99,30 @@ class Pdf(ClassLoggingMixin):
             self.parameters[p].error = m.errors[p]
             setattr(self, p, self.parameters[p])
 
-    def _pdf(self, x: ArrayLike, *args, **kwds) -> ArrayLike:  # type: ignore[no-untyped-def]
+    def _set_limits(self, m: Minuit) -> None:
+        for p in self.parameters:
+            m.limits[p] = (self.parameters[p].lwb, self.parameters[p].upb)
+
+    def pdf(self, x: ArrayLike, *args, **kwds) -> ArrayLike:  # type: ignore[no-untyped-def]
         """PDF logic implemented in the models"""
         # pylint: disable=unused-argument
         return x
 
     def evaluate(self, x: ArrayLike) -> ArrayLike:
+        """
+        Evaluates the probability density function (PDF) at the given values of x.
+        Args:
+            x (ArrayLike): The values at which to evaluate the PDF.
+        Returns:
+            ArrayLike: The values of the PDF at the given values of x.
+        """
         parameter_values = {p: self.parameters[p].value for p in self.parameters}
-        return self._pdf(x, **parameter_values)
+        return self.pdf(x, **parameter_values)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         return self.evaluate(*args, **kwds)
+
+    def __add__(self, other: Pdf) -> Pdf:
+        from .composites import AddPdf
+
+        return AddPdf([self, other])
