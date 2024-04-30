@@ -146,6 +146,7 @@ ignore = [
   "UP007",    # Conflicts with formatter
   "PD011",    # Buggy to_numpy for values
   "ARG002",   # Unused method argument in override method
+  "UP006",    # list instead of List
 ]
 isort.required-imports = ["from __future__ import annotations"]
 # Uncomment if using a _compat.typing backport

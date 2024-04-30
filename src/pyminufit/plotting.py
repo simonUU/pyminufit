@@ -154,9 +154,8 @@ class Plotter:
             return
         ax = self.ax[0]
 
-        i = 0
-        for pdf in self.model.pdfs:
-            pdf = self.model.pdfs[pdf]
+        for i, pdf_name in enumerate(self.model.pdfs):
+            pdf = self.model.pdfs[pdf_name]
 
             pdf_norm = self.model.norms[pdf.name].value / sum(
                 self.model.norms[pdf].value for pdf in self.model.pdfs
@@ -178,7 +177,6 @@ class Plotter:
                 edgecolor=current_color,
                 label=pdf.title,
             )
-            i += 1
 
     def plot_legend(self) -> None:
         self.ax[0].legend(**self.cfg.get("legend", {}), frameon=False)
