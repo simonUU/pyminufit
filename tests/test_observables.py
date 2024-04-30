@@ -6,7 +6,7 @@ from pyminufit.observables import create_real_var
 def test_create_real_var():
     # Test case 1: Testing with var=None
     result = create_real_var()
-    assert result.name == "x"
+    assert result.name == None
     assert result.value is None
     assert result.lwb is None
     assert result.upb is None

@@ -28,7 +28,8 @@ class RealVar:
         return float(self.value)
 
     def _repr_html_(self) -> str:
-        return f"<b>{self.name}</b>: {self.value:.3g} ± {self.error:.3g} {self.unit}"
+        error = self.error if self.error else 0.0
+        return f"<b>{self.name}</b>: {self.value:.3g} ± {error:.3g} {self.unit}"
 
 
 def extract_from_list(var: Union[list, tuple]) -> tuple:  # type: ignore[type-arg]
@@ -63,7 +64,7 @@ def extract_from_list(var: Union[list, tuple]) -> tuple:  # type: ignore[type-ar
 
 def create_real_var(
     var: Optional[Any] = None,
-    name: str = "x",
+    name: Optional[str] = None,
     lwb: Optional[float] = None,
     upb: Optional[float] = None,
     value: Optional[float] = None,
@@ -84,6 +85,9 @@ def create_real_var(
         RealVar object
 
     """
+    if isinstance(var, RealVar):
+        return var
+
     name_override = name
     if var:
         override_bounds = False

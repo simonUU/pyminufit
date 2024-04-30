@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 from iminuit import Minuit
 from numpy.typing import ArrayLike
 
 from .observables import RealVar, create_real_var
+from .plotting import Plotter
 from .utils import AttrDict, ClassLoggingMixin
 
 
@@ -15,11 +16,16 @@ class Pdf(ClassLoggingMixin):
     """PDF base class"""
 
     def __init__(
-        self, name: str, observables: Optional[Any] = None, **kwds: Any
+        self,
+        name: str,
+        observables: Optional[Any] = None,
+        title: Optional[str] = None,
+        **kwds: Any,
     ) -> None:
         """Initialise the Pdf"""
         super().__init__(**kwds)
         self.name = name
+        self.title = title or name
         self.observables = AttrDict()
         if observables:
             for observable in observables:
@@ -67,6 +73,16 @@ class Pdf(ClassLoggingMixin):
         self.parameters_names[param_name] = name
         setattr(self, param_name, param)
         return self.parameters[param_name]  # type: ignore[no-any-return]
+
+    @property
+    def observable(self) -> RealVar:
+        """Return the first observable"""
+        if len(self.observables) == 0:
+            msg = "No observables defined"
+            raise ValueError(msg)
+        if len(self.observables) > 1:
+            self.warn("Multiple observables defined, returning the first one")
+        return next(iter(self.observables.values()))  # type: ignore[no-any-return]
 
     def add_observable(self, observable_var: Any, **kwds: Any) -> RealVar:
         """Add an observable to the PDF"""
@@ -126,3 +142,12 @@ class Pdf(ClassLoggingMixin):
         from .composites import AddPdf
 
         return AddPdf([self, other])
+
+    def plot(
+        self,
+        data: ArrayLike,
+        filename: Optional[str],
+        cfg: Optional[Dict[str, Any]] = None,
+    ) -> Plotter:
+        """Plot the PDF"""
+        return Plotter(self, data, cfg=cfg)

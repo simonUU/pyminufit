@@ -1,4 +1,4 @@
-""" Automatic combination of PDFs
+"""Automatic combination of PDFs
 
 This module handles the automatic combination of PDFs.
 A combination can be a product or addition of two PDFs.
@@ -7,12 +7,16 @@ Also convolution is supported.
 
 """
 
-from typing import Any, List, Optional, Union
+from __future__ import annotations
+
+from typing import Any, Optional, Tuple, Union
+
+from iminuit import Minuit
+from iminuit.cost import ExtendedUnbinnedNLL
 from numpy.typing import ArrayLike
 
 from pyminufit.observables import create_real_var
-from iminuit.cost import ExtendedUnbinnedNLL
-from iminuit import Minuit
+
 from .pdf import Pdf
 from .utils import AttrDict
 
@@ -47,7 +51,9 @@ class AddPdf(Pdf):
 
     """
 
-    def __init__(self, pdfs: Optional[List[Pdf]] = None, name: Optional[str] = None, **kwds: Any) -> None:
+    def __init__(
+        self, pdfs: Optional[list[Pdf]] = None, name: Optional[str] = None, **kwds: Any
+    ) -> None:
         self.pdfs = AttrDict()
         self.primary_pdf: Optional[Pdf] = None
         self.norms = AttrDict()
@@ -60,11 +66,11 @@ class AddPdf(Pdf):
             pdfs = []
             if name is None:
                 name = "AddPdf"
-        super(AddPdf, self).__init__(name=name, **kwds)
+        super().__init__(name=name, **kwds)
 
         for pdf in pdfs:
             self.add(pdf)
-        
+
         self.use_extended = True
 
     def add(self, pdf: Pdf) -> None:
@@ -79,13 +85,14 @@ class AddPdf(Pdf):
 
         # Check for duplicate names
         if pdf.name in self.pdfs:
-            raise ValueError("PDF with name {} already exists".format(pdf.name))
+            msg = f"PDF with name {pdf.name} already exists"
+            raise ValueError(msg)
 
         self.pdfs[pdf.name] = pdf
         self.norms["n_" + pdf.name] = 1.0
         self.init_pdf()
 
-    def constrain_norm(self, pdf: Union[Pdf,str], normalization: float) -> None:
+    def constrain_norm(self, pdf: Union[Pdf, str], normalization: float) -> None:
         """Constrain a norm with an external normalisation
 
         Args:
@@ -93,7 +100,7 @@ class AddPdf(Pdf):
             normalization (:obj:`ROOT.RooAbsReal`): New normalisation to be used in the ROOT.RooAddPdf initialisation
 
         """
-        assert isinstance(pdf, Pdf) or isinstance(pdf, str), "please specify pdf"
+        assert isinstance(pdf, (Pdf, str)), "please specify pdf"
         if isinstance(pdf, Pdf):
             pdf = pdf.name
         assert pdf in self.pdfs, "Pdf not found"
@@ -129,16 +136,21 @@ class AddPdf(Pdf):
             name=tuple(self.parameters.keys()),
         )
         self._set_limits(m)
-        m.migrad(**kwds)            
+        m.migrad(**kwds)
         m.hesse()
         return m
 
-    def density(self, x, *args):  # type: ignore[no-untyped-def]
+    def density(self, x, *args) -> Tuple[float, float]:  # type: ignore[no-untyped-def]
         kwargs = dict(zip(self.parameters.keys(), args))
-        norm_names = ["n_" + pdf_name for pdf_name in self.pdfs.keys()]
+        norm_names = ["n_" + pdf_name for pdf_name in self.pdfs]
         norm = sum([kwargs[n] for n in norm_names])
         component_sum = 0
         for pdf_name, pdf in self.pdfs.items():
             pdf_params_dict = {k: kwargs[pdf_name + "_" + k] for k in pdf.parameters}
-            component_sum += kwargs["n_"+pdf_name] * pdf.pdf(x, **pdf_params_dict)
+            component_sum += kwargs["n_" + pdf_name] * pdf.pdf(x, **pdf_params_dict)
         return norm, component_sum
+
+    def pdf(self, x: ArrayLike, *args, **kwds) -> ArrayLike:  # type: ignore[no-untyped-def]
+        kwargs = {k: v.value for k, v in self.parameters.items()}
+        norm, component_sum = self.density(x, *kwargs.values())
+        return component_sum / norm
