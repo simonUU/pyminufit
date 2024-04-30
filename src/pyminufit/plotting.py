@@ -1,12 +1,11 @@
-from typing import Any, Dict, List, Optional, Union, Tuple, Callable
-from dataclasses import dataclass
-from numpy.typing import ArrayLike
+from __future__ import annotations
 
-import numpy as np
-from numpy.typing import NDArray
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
-
+import numpy as np
+from numpy.typing import ArrayLike, NDArray
 
 HATCHES = [
     "",
@@ -96,7 +95,7 @@ class Plotter:
             ax = list(ax)
         return ax  # type: ignore[no-any-return]
 
-    def plot(self, components: Optional[List[str]], filename: Optional[str]) -> "Plotter":
+    def plot(self, components: Optional[List[str]], filename: Optional[str]) -> Plotter:
         if not components:
             # check if self.model has attribute pdfs
             if hasattr(self.model, "pdfs"):

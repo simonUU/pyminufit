@@ -70,7 +70,6 @@ class Chebyshev(Pdf):
         self._init_pdf()
 
     def pdf(self, x, *args, **kwargs: Dict[str, Any]):  # type: ignore[no-untyped-def]
-        
         coeffs = args if args else tuple(kwargs.values())
 
         c = np.array(list(coeffs))
