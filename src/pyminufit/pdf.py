@@ -166,9 +166,10 @@ class Pdf(ClassLoggingMixin):
 
         if parameter is None:
             for m in self.parameters:
-                print(f"{m:18} ==> {self._get_parameter(m, True)}")
+                self.info(f"{m:18} ==> {self._get_parameter(m, True)}")
         else:
             return self._get_parameter(parameter, as_ufloat)
+        return self.parameters
 
     def _get_parameter(self, param: str, as_ufloat: bool = False) -> Any:
         """Internal getter for parameter values
@@ -193,8 +194,7 @@ class Pdf(ClassLoggingMixin):
         try:
             from uncertainties import ufloat
 
-            ret = ufloat(val, err)
-            return ret
+            return ufloat(val, err)
         except ImportError:
             return val, err
 

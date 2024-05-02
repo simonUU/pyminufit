@@ -53,7 +53,6 @@ class Plotter:
         nbins: Optional[int] = None,
         xrange: Optional[Tuple[float, float]] = None,
         ax: Optional[List[plt.Axes]] = None,
-        components: Optional[List[str]] = None,
         cfg: Optional[Dict[str, Any]] = None,
     ) -> None:
         self.cfg = cfg or {}
@@ -63,7 +62,7 @@ class Plotter:
         self.nbins = nbins or int(2 * len(data) ** 0.333)
         self.h = Hist(*np.histogram(data, bins=self.nbins, range=self.xrange))
         self.scale = len(data) * self.h.dx[0]
-        self.ax = ax
+        self.ax: List[plt.Axes] = ax or [plt.gca()]
         self.parts: Dict[str, Callable[[], None]] = {
             "hist": self.plot_hist,
             "pdf": self.plot_pdf,
@@ -98,7 +97,7 @@ class Plotter:
         return ax  # type: ignore[no-any-return]
 
     def plot(
-        self, components: Optional[List[str]] = [], filename: Optional[str] = None
+        self, components: Optional[List[str]] = None, filename: Optional[str] = None
     ) -> Plotter:
         if not components:
             # check if self.model has attribute pdfs
