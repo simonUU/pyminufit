@@ -26,12 +26,14 @@
 
 <!-- prettier-ignore-end -->
 
-This package is an interface to `iminuit` to allow for fast simple fits and mimics the functionallity of `PyrooFit` which is an interface on top of the ROOT.RooFit package.
+This package is an interface to `iminuit` to allow for fast simple fits and
+mimics the functionality of `PyrooFit` which is an interface on top of the
+ROOT.RooFit package.
 
-The package allows for simple fits of standard PDFs and easy setup of custom PDFs in one or more fit dimensions.
+The package allows for simple fits of standard PDFs and easy setup of custom
+PDFs in one or more fit dimensions.
 
-Example
--------
+## Example
 
 Simple fit and plot of a Gaussian Distribution:
 
@@ -41,15 +43,17 @@ import numpy as np
 
 data = np.random.normal(0, 1, 1000)
 
-pdf = Gauss(('x', -3, 3), mean=(-1, 0, 1))
+pdf = Gauss(("x", -3, 3), mean=(-1, 0, 1))
 pdf.fit(data)
-pdf.plot('example_gauss.pdf',)
+pdf.plot(
+    "example_gauss.pdf",
+)
 
 pdf.get()
-
 ```
 
-A more complex example on combination of Gauss pdf for signal and Polynomial for background:
+A more complex example on combination of Gauss pdf for signal and Polynomial for
+background:
 
 ```python
 from pyminufit.models import Gauss, Chebychev
@@ -58,15 +62,16 @@ import pandas as pd
 import ROOT
 
 
-
 from pyminufit.models import Gauss, Chebyshev
 from pyminufit.observables import create_real_var
 import numpy as np
 
 
-data = np.append(np.random.random_sample(1000)*10 + 745, np.random.normal(750, 1, 1000))
+data = np.append(
+    np.random.random_sample(1000) * 10 + 745, np.random.normal(750, 1, 1000)
+)
 
-x = create_real_var(('mass', 745, 755), unit="GeV")
+x = create_real_var(("mass", 745, 755), unit="GeV")
 
 pdf_sig = Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
 pdf_bkg = Chebyshev(x, order=2, title="Background")
@@ -74,26 +79,26 @@ pdf_bkg = Chebyshev(x, order=2, title="Background")
 pdf = pdf_sig + pdf_bkg
 
 pdf.fit(data)
-pdf.plot(data, '02_add_pdf.png')
+pdf.plot(data, "02_add_pdf.png")
 pdf.get()
-
 ```
+
 ![Fitting multiple pdf to data](./examples/02_add_pdf.png)
 
-Observables can be initialised by a list or tuple with the column name / variable name as first argument, followed
-by the range and/or with the initial value and range:
+Observables can be initialised by a list or tuple with the column name /
+variable name as first argument, followed by the range and/or with the initial
+value and range:
+
 ```
 x = ('x', -3, 3)
 x = ('mass', -3, 0.02, 3)
 ```
 
-Parameters are initialised with a tuple: `sigma=(0,1)` 
-or again including a starting parameter: `sigma=(0.01, 0, 1)`
-The order here is not important.
+Parameters are initialised with a tuple: `sigma=(0,1)` or again including a
+starting parameter: `sigma=(0.01, 0, 1)` The order here is not important.
 
+# Installation
 
-Installation
-============
 (will be accessible via pip soon)
 
 ```

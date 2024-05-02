@@ -151,9 +151,9 @@ class Pdf(ClassLoggingMixin):
     ) -> Plotter:
         """Plot the PDF"""
         return Plotter(self, data, cfg=cfg).plot(filename=filename)
-    
-    def get(self, parameter: Optional[str] = None, as_ufloat: bool =False) -> Any:
-        """ Get one of the fitted parameter or print all if None is set
+
+    def get(self, parameter: Optional[str] = None, as_ufloat: bool = False) -> Any:
+        """Get one of the fitted parameter or print all if None is set
 
         Args:
             parameter (str): name of the parameter
@@ -166,12 +166,12 @@ class Pdf(ClassLoggingMixin):
 
         if parameter is None:
             for m in self.parameters:
-                print('{0:18} ==> {1}'.format(m, self._get_parameter(m, True)))
+                print(f"{m:18} ==> {self._get_parameter(m, True)}")
         else:
             return self._get_parameter(parameter, as_ufloat)
-    
+
     def _get_parameter(self, param: str, as_ufloat: bool = False) -> Any:
-        """ Internal getter for parameter values
+        """Internal getter for parameter values
 
         Args:
             param: Parameter name
@@ -192,10 +192,11 @@ class Pdf(ClassLoggingMixin):
             return val, err
         try:
             from uncertainties import ufloat
+
             ret = ufloat(val, err)
             return ret
         except ImportError:
             return val, err
-        
-    def __getitem__(self, parameter_name: str) ->Any:
+
+    def __getitem__(self, parameter_name: str) -> Any:
         return self._get_parameter(parameter_name)

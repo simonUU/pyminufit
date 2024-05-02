@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" Simple fit to a gaussian distribution
+"""Simple fit to a gaussian distribution
 
 In this example a fit is performed to a simple gaussion distribution.
 
@@ -20,8 +20,8 @@ import numpy as np
 
 data = np.random.normal(0, 1, 1000)
 
-pdf = Gauss(('x', -3, 3), mean=(-1, 0, 1))
+pdf = Gauss(("x", -3, 3), mean=(-1, 0, 1))
 pdf.fit(data)
-pdf.plot(data, '01_simple_fit.png')
+pdf.plot(data, "01_simple_fit.png")
 
 pdf.get()

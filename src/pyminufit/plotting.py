@@ -91,13 +91,15 @@ class Plotter:
                 figsize=self.cfg.get("figsize", (4, 4)),
                 gridspec_kw=gridspec_kw,
             )
-            if nx >1:
+            if nx > 1:
                 ax = list(ax)
         if not isinstance(ax, list):
             ax = [ax]
         return ax  # type: ignore[no-any-return]
 
-    def plot(self, components: Optional[List[str]] = [], filename: Optional[str] = None) -> Plotter:
+    def plot(
+        self, components: Optional[List[str]] = [], filename: Optional[str] = None
+    ) -> Plotter:
         if not components:
             # check if self.model has attribute pdfs
             if hasattr(self.model, "pdfs"):
@@ -117,7 +119,7 @@ class Plotter:
         if len(self.ax) > 1:
             plt.subplots_adjust(hspace=0)
         if filename:
-            plt.savefig(filename, bbox_inches='tight', dpi=300)
+            plt.savefig(filename, bbox_inches="tight", dpi=300)
         return self
 
     def plot_hist(self) -> None:

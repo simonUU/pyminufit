@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" Simple fit to a gaussian distribution
+"""Simple fit to a gaussian distribution
 
 In this example a fit is performed to a simple gaussion distribution.
 
@@ -18,9 +18,11 @@ from pyminufit.observables import create_real_var
 import numpy as np
 
 
-data = np.append(np.random.random_sample(1000)*10 + 745, np.random.normal(750, 1, 1000))
+data = np.append(
+    np.random.random_sample(1000) * 10 + 745, np.random.normal(750, 1, 1000)
+)
 
-x = create_real_var(('mass', 745, 755), unit="GeV")
+x = create_real_var(("mass", 745, 755), unit="GeV")
 
 pdf_sig = Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
 pdf_bkg = Chebyshev(x, order=2, title="Background")
@@ -28,5 +30,5 @@ pdf_bkg = Chebyshev(x, order=2, title="Background")
 pdf = pdf_sig + pdf_bkg
 
 pdf.fit(data)
-pdf.plot(data, '02_add_pdf.png')
+pdf.plot(data, "02_add_pdf.png")
 pdf.get()
