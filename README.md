@@ -83,7 +83,8 @@ pdf.plot(data, "02_add_pdf.png")
 pdf.get()
 ```
 
-![Fitting multiple pdf to data](./examples/02_add_pdf.png)
+<img src="./examples/02_add_pdf.png" width="400" height="400" alt="Fitting multiple pdf to data.">
+
 
 Observables can be initialised by a list or tuple with the column name /
 variable name as first argument, followed by the range and/or with the initial
