@@ -150,4 +150,52 @@ class Pdf(ClassLoggingMixin):
         cfg: Optional[Dict[str, Any]] = None,
     ) -> Plotter:
         """Plot the PDF"""
-        return Plotter(self, data, cfg=cfg)
+        return Plotter(self, data, cfg=cfg).plot(filename=filename)
+    
+    def get(self, parameter: Optional[str] = None, as_ufloat: bool =False) -> Any:
+        """ Get one of the fitted parameter or print all if None is set
+
+        Args:
+            parameter (str): name of the parameter
+            as_ufloat (bool, optional): If true return ufloat object, else tuple
+
+        Returns:
+            :obj:`tuple` or :obj:`ufloat` mean and error of parameter
+
+        """
+
+        if parameter is None:
+            for m in self.parameters:
+                print('{0:18} ==> {1}'.format(m, self._get_parameter(m, True)))
+        else:
+            return self._get_parameter(parameter, as_ufloat)
+    
+    def _get_parameter(self, param: str, as_ufloat: bool = False) -> Any:
+        """ Internal getter for parameter values
+
+        Args:
+            param: Parameter name
+            as_ufloat: Return ufolat object
+
+        Returns:
+            :obj:`tuple` or :obj:`ufloat` mean and error of parameter
+        """
+        mes = self.parameters[param]
+        val = mes.value
+
+        # Now catch RooFormulaVar
+        try:
+            err = mes.error
+        except AttributeError:
+            err = 0
+        if not as_ufloat:
+            return val, err
+        try:
+            from uncertainties import ufloat
+            ret = ufloat(val, err)
+            return ret
+        except ImportError:
+            return val, err
+        
+    def __getitem__(self, parameter_name: str) ->Any:
+        return self._get_parameter(parameter_name)

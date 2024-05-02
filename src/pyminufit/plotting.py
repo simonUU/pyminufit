@@ -63,7 +63,7 @@ class Plotter:
         self.nbins = nbins or int(2 * len(data) ** 0.333)
         self.h = Hist(*np.histogram(data, bins=self.nbins, range=self.xrange))
         self.scale = len(data) * self.h.dx[0]
-        self.ax = self.setup_axis(ax, [])
+        self.ax = ax
         self.parts: Dict[str, Callable[[], None]] = {
             "hist": self.plot_hist,
             "pdf": self.plot_pdf,
@@ -88,14 +88,16 @@ class Plotter:
                 nx,
                 1,
                 sharex=True,
-                figsize=self.cfg.get("figsize", (5, 5)),
+                figsize=self.cfg.get("figsize", (4, 4)),
                 gridspec_kw=gridspec_kw,
             )
+            if nx >1:
+                ax = list(ax)
         if not isinstance(ax, list):
-            ax = list(ax)
+            ax = [ax]
         return ax  # type: ignore[no-any-return]
 
-    def plot(self, components: Optional[List[str]], filename: Optional[str]) -> Plotter:
+    def plot(self, components: Optional[List[str]] = [], filename: Optional[str] = None) -> Plotter:
         if not components:
             # check if self.model has attribute pdfs
             if hasattr(self.model, "pdfs"):
@@ -109,13 +111,13 @@ class Plotter:
                 ]
             else:
                 components = ["hist", "pdf", "axes_labels", "distribution"]
-        self.ax = self.setup_axis(self.ax, components)
+        self.ax = self.setup_axis(None, components)
         for c in components:
             self.parts[c]()
         if len(self.ax) > 1:
             plt.subplots_adjust(hspace=0)
         if filename:
-            plt.savefig(filename)
+            plt.savefig(filename, bbox_inches='tight', dpi=300)
         return self
 
     def plot_hist(self) -> None:
@@ -187,7 +189,7 @@ class Plotter:
         obs_unit = self.model.observable.unit or ""
         per_bin = f"{binsize:.1g}"
         if obs_unit != "":
-            per_bin = f" ( {per_bin} / {obs_unit} )"
+            per_bin = f" ( {per_bin} {obs_unit} )"
         self.ax[0].set_ylabel(f"Entries / {per_bin}")
         if len(self.ax) > 1:
             self.ax[1].set_ylabel("Pull")
