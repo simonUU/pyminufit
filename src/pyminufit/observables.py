@@ -11,7 +11,24 @@ from typing import Any, Optional, Union
 
 @dataclass
 class RealVar:
-    """Real variable class"""
+    """
+    Represents a real-valued variable with associated properties.
+
+    Attributes:
+        name (str): The name of the variable.
+        value (float): The value of the variable.
+        error (Optional[float]): The error associated with the variable (if available).
+        lwb (Optional[float]): The lower bound of the variable (if available).
+        upb (Optional[float]): The upper bound of the variable (if available).
+        unit (Optional[str]): The unit of the variable (if available).
+        is_constant (bool): Indicates whether the variable is constant or not.
+
+    Methods:
+        __float__(): Returns the value of the variable as a float.
+        __call__(): Returns the value of the variable as a float.
+        _repr_html_(): Returns an HTML representation of the variable.
+
+    """
 
     name: str
     value: float
@@ -28,8 +45,9 @@ class RealVar:
         return float(self.value)
 
     def _repr_html_(self) -> str:
-        error = self.error if self.error else 0.0
-        return f"<b>{self.name}</b>: {self.value:.3g} ± {error:.3g} {self.unit}"
+        val = f"<b>{self.name}</b>: {self.value:.3g}"
+        val += f" ± {self.error:.3g}" if self.error else ""
+        return val + f" {self.unit}"
 
 
 def extract_from_list(var: Union[list, tuple]) -> tuple:  # type: ignore[type-arg]

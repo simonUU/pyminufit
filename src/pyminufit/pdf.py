@@ -22,7 +22,16 @@ class Pdf(ClassLoggingMixin):
         title: Optional[str] = None,
         **kwds: Any,
     ) -> None:
-        """Initialise the Pdf"""
+        """
+        Initialize a PDF object.
+
+        Args:
+            name (str): The name of the PDF.
+            observables (Optional[Any]): A list of observables.
+            title (Optional[str]): The title of the PDF. If not provided, it defaults to the name.
+            **kwds (Any): Additional keyword arguments.
+
+        """
         super().__init__(**kwds)
         self.name = name
         self.title = title or name
@@ -146,7 +155,7 @@ class Pdf(ClassLoggingMixin):
     def plot(
         self,
         data: ArrayLike,
-        filename: Optional[str],
+        filename: Optional[str] = None,
         cfg: Optional[Dict[str, Any]] = None,
     ) -> Plotter:
         """Plot the PDF"""

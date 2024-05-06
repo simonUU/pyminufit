@@ -35,6 +35,17 @@ DEFAULT_COLORS = [
 
 @dataclass
 class Hist:
+    """
+    Represents a histogram.
+
+    Attributes:
+        n (int): The number of bins in the histogram.
+        xe (numpy.ndarray): The bin edges of the histogram.
+
+    Methods:
+        __post_init__(self) -> None: Initializes the histogram object and calculates additional attributes.
+    """
+
     n: int
     xe: NDArray
 
@@ -48,13 +59,27 @@ class Hist:
 class Plotter:
     def __init__(
         self,
-        model: Any,  # Replace 'Any' with the actual type of 'model'
+        model: Any,
         data: ArrayLike,
         nbins: Optional[int] = None,
         xrange: Optional[Tuple[float, float]] = None,
         ax: Optional[List[plt.Axes]] = None,
         cfg: Optional[Dict[str, Any]] = None,
     ) -> None:
+        """
+        Initialize the Plotter object.
+
+        Args:
+            model: The model used for fitting.
+            data: The data to be plotted.
+            nbins: The number of bins for the histogram. If not provided, it is calculated based on the data length.
+            xrange: The range of the x-axis. If not provided, it is determined based on the minimum and maximum values of the data.
+            ax: The list of matplotlib Axes objects to plot on. If not provided, a new Axes object will be created.
+            cfg: Additional configuration options for the plot. If not provided, an empty dictionary is used.
+
+        Returns:
+            None
+        """
         self.cfg = cfg or {}
         self.model = model
         self.data = data
@@ -62,7 +87,7 @@ class Plotter:
         self.nbins = nbins or int(2 * len(data) ** 0.333)
         self.h = Hist(*np.histogram(data, bins=self.nbins, range=self.xrange))
         self.scale = len(data) * self.h.dx[0]
-        self.ax: List[plt.Axes] = ax or [plt.gca()]
+        self.ax: List[plt.Axes] = ax or []
         self.parts: Dict[str, Callable[[], None]] = {
             "hist": self.plot_hist,
             "pdf": self.plot_pdf,
