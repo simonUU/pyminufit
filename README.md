@@ -33,6 +33,12 @@ ROOT.RooFit package.
 The package allows for simple fits of standard PDFs and easy setup of custom
 PDFs in one or more fit dimensions.
 
+## Links
+| Description | Link |
+|-------------|------|
+| Documentation | [pyminufit Documentation][rtd-link] |
+| GitHub Repository | [pyminufit GitHub Repository][actions-link] |
+
 ## Example
 
 Simple fit and plot of a Gaussian Distribution:
@@ -104,6 +110,12 @@ starting parameter: `sigma=(0.01, 0, 1)` The order here is not important.
 ```
 pip install -e .
 ```
+
+
+# Development
+
+If you have any questions or need help with this package, your contributions are greatly appreciated. This project is a side project, so any assistance is welcome. When contributing, please follow design principles that prioritize simplicity of the interface while preserving the complexity of the underlying functionality. You can contribute by submitting a pull request (PR) to the GitHub repository. For larger changes consider discussing ideas in GitHub Issues. Thank you for your support!
+
 
 ---
 
