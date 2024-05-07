@@ -2,9 +2,17 @@ from __future__ import annotations
 
 import importlib.metadata
 
+# Fix images
+import shutil
+import glob
+
+for file in glob.glob("../examples/*.png"):
+    shutil.copy(file, "examples")
+
+
 project = "pyminufit"
-copyright = "2024, Simon"
-author = "Simon"
+copyright = "2024, Simon Wehle"
+author = "Simon Wehle"
 version = release = importlib.metadata.version("pyminufit")
 
 extensions = [
