@@ -110,9 +110,22 @@ starting parameter: `sigma=(0.01, 0, 1)` The order here is not important.
 
 ## Installation
 
-(will be accessible via pip soon)
+You can install `pyminufit` directly from PyPI using pip:
 
+```bash
+pip install pyminufit
 ```
+
+Alternatively, if you want to install the development version directly from
+GitHub, you can do so with:
+
+```bash
+pip install git+https://github.com/simonuu/pyminufit.git
+```
+
+For a development installation, download the git reposityro and run:
+
+```bash
 pip install -e .
 ```
 
@@ -125,6 +138,13 @@ simplicity of the interface while preserving the complexity of the underlying
 functionality. You can contribute by submitting a pull request (PR) to the
 GitHub repository. For larger changes consider discussing ideas in GitHub
 Issues. Thank you for your support!
+
+## Planned Features
+
+- [ ] ProdPdf: Product pdf for multiple observables
+- [ ] Convolutions
+- [ ] Shared parameters
+- [ ] Backend options for the pdf calculation
 
 ---
 
