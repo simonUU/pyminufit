@@ -13,8 +13,7 @@ The order here is not important.
 
 """
 
-from pyminufit.models import Gauss, Chebyshev
-from pyminufit.observables import create_real_var
+import pyminufit as mnf
 import numpy as np
 
 
@@ -22,10 +21,10 @@ data = np.append(
     np.random.random_sample(1000) * 10 + 745, np.random.normal(750, 1, 1000)
 )
 
-x = create_real_var(("mass", 745, 755), unit="GeV")
+x = mnf.create_real_var(("mass", 745, 755), unit="GeV")
 
-pdf_sig = Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
-pdf_bkg = Chebyshev(x, order=2, title="Background")
+pdf_sig = mnf.Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
+pdf_bkg = mnf.Chebyshev(x, order=2, title="Background")
 
 pdf = pdf_sig + pdf_bkg
 

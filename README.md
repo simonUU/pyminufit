@@ -67,30 +67,22 @@ A more complex example on combination of Gauss pdf for signal and Polynomial for
 background:
 
 ```python
-from pyminufit.models import Gauss, Chebychev
+import pyminufit as mnf
 import numpy as np
-import pandas as pd
-import ROOT
-
-
-from pyminufit.models import Gauss, Chebyshev
-from pyminufit.observables import create_real_var
-import numpy as np
-
 
 data = np.append(
     np.random.random_sample(1000) * 10 + 745, np.random.normal(750, 1, 1000)
 )
 
-x = create_real_var(("mass", 745, 755), unit="GeV")
+x = mnf.create_real_var(("mass", 745, 755), unit="GeV")
 
-pdf_sig = Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
-pdf_bkg = Chebyshev(x, order=2, title="Background")
+pdf_sig = mnf.Gauss(x, mean=(745, 755), sigma=(0.1, 1, 2), title="Signal")
+pdf_bkg = mnf.Chebyshev(x, order=2, title="Background")
 
 pdf = pdf_sig + pdf_bkg
 
 pdf.fit(data)
-pdf.plot(data, "02_add_pdf.png")
+pdf.plot(data, "02_add_pdf.png", dpi=150)
 pdf.get()
 ```
 

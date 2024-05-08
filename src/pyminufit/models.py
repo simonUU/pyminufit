@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, Union
 
 import numpy as np
 from iminuit import Minuit
@@ -11,7 +11,10 @@ from numpy.polynomial.chebyshev import chebval
 from numpy.typing import ArrayLike
 from scipy.stats import norm
 
+from .observables import RealVar
 from .pdf import Pdf
+
+__all__ = ["Gauss", "Normal", "Chebyshev"]
 
 
 class Gauss(Pdf):
@@ -19,9 +22,9 @@ class Gauss(Pdf):
 
     def __init__(
         self,
-        observable: Sequence[Any],
-        mean: Sequence[Any] = (-1, 0, 1),
-        sigma: Sequence[Any] = (0, 1),
+        observable: Union[Sequence[Any], RealVar],
+        mean: Union[Sequence[Any], RealVar] = (-1, 0, 1),
+        sigma: Union[Sequence[Any], RealVar] = (0, 1),
         name: str = "gauss",
         *args: Any,
         **kwds: Any,
@@ -50,12 +53,16 @@ class Gauss(Pdf):
         return norm.pdf(x, mean, sigma)
 
 
+# Add alias
+Normal = Gauss
+
+
 class Chebyshev(Pdf):
     """Chebyshev"""
 
     def __init__(
         self,
-        observable: Sequence[Any],
+        observable: Union[Sequence[Any], RealVar],
         order: int = 2,
         name: str = "chebyshev",
         do_normalize: bool = True,
