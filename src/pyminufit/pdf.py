@@ -157,9 +157,11 @@ class Pdf(ClassLoggingMixin):
         data: ArrayLike,
         filename: Optional[str] = None,
         cfg: Optional[Dict[str, Any]] = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> Plotter:
         """Plot the PDF"""
-        return Plotter(self, data, cfg=cfg).plot(filename=filename)
+        return Plotter(self, data, cfg=cfg).plot(None, filename, *args, **kwargs)
 
     def get(self, parameter: Optional[str] = None, as_ufloat: bool = False) -> Any:
         """Get one of the fitted parameter or print all if None is set

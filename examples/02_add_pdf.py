@@ -30,5 +30,5 @@ pdf_bkg = Chebyshev(x, order=2, title="Background")
 pdf = pdf_sig + pdf_bkg
 
 pdf.fit(data)
-pdf.plot(data, "02_add_pdf.png")
+pdf.plot(data, "02_add_pdf.png", dpi=150)
 pdf.get()

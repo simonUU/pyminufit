@@ -122,7 +122,11 @@ class Plotter:
         return ax  # type: ignore[no-any-return]
 
     def plot(
-        self, components: Optional[List[str]] = None, filename: Optional[str] = None
+        self,
+        components: Optional[List[str]] = None,
+        filename: Optional[str] = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> Plotter:
         if not components:
             # check if self.model has attribute pdfs
@@ -143,7 +147,7 @@ class Plotter:
         if len(self.ax) > 1:
             plt.subplots_adjust(hspace=0)
         if filename:
-            plt.savefig(filename, bbox_inches="tight", dpi=300)
+            plt.savefig(filename, *args, **kwargs, bbox_inches="tight")
         return self
 
     def plot_hist(self) -> None:
